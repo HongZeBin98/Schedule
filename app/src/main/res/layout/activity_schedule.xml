@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.ScheduleActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/id_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        app:title="Schedule"
+        app:titleTextColor="#fff">
+
+        <Button
+            android:id="@+id/id_log_off"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="end"
+            android:background="@mipmap/log_off"
+            android:layout_marginEnd="15dp"/>
+
+        <Button
+            android:id="@+id/id_weeks"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="end"
+            android:layout_marginEnd="5dp"
+            android:background="@mipmap/weeks" />
+
+    </android.support.v7.widget.Toolbar>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="#fff">
+
+        <TextView
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="节/周"
+            android:textColor="#000" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="周日"
+            android:textColor="#000" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="周一"
+            android:textColor="#000" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="周二"
+            android:textColor="#000" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="周三"
+            android:textColor="#000" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="周四"
+            android:textColor="#000" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="周五"
+            android:textColor="#000" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="周六"
+            android:textColor="#000" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#d3d3d3"
+            android:orientation="horizontal">
+
+            <!--左侧"节数"布局-->
+            <LinearLayout
+                android:id="@+id/left_view_layout"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:background="#fff"
+                android:orientation="vertical"/>
+
+            <!--星期一到星期天的布局-->
+            <RelativeLayout
+                android:id="@+id/sunday"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_margin="1dp"
+                android:layout_weight="1"
+                android:orientation="vertical" />
+
+            <RelativeLayout
+                android:id="@+id/monday"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_margin="1dp"
+                android:layout_weight="1"
+                android:orientation="vertical" />
+
+            <RelativeLayout
+                android:id="@+id/tuesday"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_margin="1dp"
+                android:layout_weight="1"
+                android:orientation="vertical" />
+
+            <RelativeLayout
+                android:id="@+id/wednesday"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_margin="1dp"
+                android:layout_weight="1"
+                android:orientation="vertical" />
+
+            <RelativeLayout
+                android:id="@+id/thursday"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_margin="1dp"
+                android:layout_weight="1"
+                android:orientation="vertical" />
+
+            <RelativeLayout
+                android:id="@+id/friday"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_margin="1dp"
+                android:layout_weight="1"
+                android:orientation="vertical" />
+
+            <RelativeLayout
+                android:id="@+id/saturday"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="1dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginTop="1dp"
+                android:layout_weight="1"
+                android:orientation="vertical" />
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
