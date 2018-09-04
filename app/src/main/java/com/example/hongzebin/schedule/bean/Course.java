@@ -8,6 +8,9 @@ import org.greenrobot.greendao.annotation.Keep;
 import org.greenrobot.greendao.annotation.Property;
 import org.greenrobot.greendao.annotation.Generated;
 
+/**
+ * 课程对象，全部属性都是字符串，该对象用于GreenDao的存储，需要进行转换才可以直接用于课表的显示
+ */
 @Entity
 public class Course {
     @Id
@@ -55,8 +58,8 @@ public class Course {
 
     @Generated(hash = 2006004045)
     public Course(Long id, String name, String number, String major,
-            String figureNumber, String time, String week, String weekday,
-            String place, String teacher) {
+                  String figureNumber, String time, String week, String weekday,
+                  String place, String teacher) {
         this.id = id;
         this.name = name;
         this.number = number;
@@ -148,6 +151,4 @@ public class Course {
     public void setTeacher(String teacher) {
         this.teacher = teacher;
     }
-
-
 }

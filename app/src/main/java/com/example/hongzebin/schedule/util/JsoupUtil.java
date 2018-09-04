@@ -21,8 +21,13 @@ import java.util.Map;
 
 import static android.content.Context.MODE_PRIVATE;
 
+/**
+ * 该类通过Jsoup把网页上的课程表信息变成json数据
+ */
 public class JsoupUtil {
+    //需要模拟登录的网页
     private static String LOGIN_URL = "http://authserver.gdut.edu.cn/authserver/login?service=http%3A%2F%2Fjxfw.gdut.edu.cn%2Fnew%2FssoLogin";
+    //模拟登录需要的相关配置
     private static String USER_AGENT = "User-Agent";
     private static String USER_AGENT_VALUE = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0";
 
@@ -31,6 +36,13 @@ public class JsoupUtil {
         void onException();
     }
 
+    /**
+     * 通过模拟登录来获取到用户的课程表信息
+     * @param context   上下文
+     * @param userName  用户名
+     * @param password  密码
+     * @param listener  接口
+     */
     public void simulateLogin(final Context context, final String userName, final String password,  final HttpCallBackListener listener){
         new Thread(new Runnable() {
             @Override
@@ -81,7 +93,7 @@ public class JsoupUtil {
                             .followRedirects(true)
                             .cookies(login.cookies())
                             .execute();
-                    //保存cookies
+                    //保存cookies，下次登录时就是通过判断是否有保存的cookies来判断数据库中是否有数据，从而判断是否要登录
                     saveCookies(context, login.cookies());
                     //从html信息中截取到课程表的json信息
                     Document document = Jsoup.parse(response.body());
@@ -99,7 +111,7 @@ public class JsoupUtil {
     }
 
     /**
-     * 保存cookies
+     * 保存cookies到本地，下次登录时就是通过判断是否有本地cookies来确定数据库中是否有数据，从而判断是否需要登录
      * @param context   上下文
      * @param cookies   需要保存的cookies
      */
@@ -110,21 +122,4 @@ public class JsoupUtil {
         editor.apply();
     }
 
-//    public void getScheduleJson(final String url, final HttpCallBackListener listener) {
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                Connection con = Jsoup.connect(url);
-//                con.header(USER_AGENT, USER_AGENT_VALUE);
-//                try {
-//                    Response response = con.method(Connection.Method.GET)
-//                            .cookies(mCookies)
-//                            .execute();
-//                    listener.onFinish(response.body());
-//                } catch (IOException e) {
-//                    Log.e("JsoupUtil", Log.getStackTraceString(e));
-//                }
-//            }
-//        }).start();
-//    }
 }

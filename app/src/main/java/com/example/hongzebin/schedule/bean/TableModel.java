@@ -2,6 +2,9 @@ package com.example.hongzebin.schedule.bean;
 
 import java.util.List;
 
+/**
+ * 课程对象，该对象可以直接用于课表的显示上面
+ */
 public class TableModel {
 
     private String name;    //课程名称

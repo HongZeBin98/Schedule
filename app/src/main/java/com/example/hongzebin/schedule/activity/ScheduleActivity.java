@@ -1,7 +1,6 @@
 package com.example.hongzebin.schedule.activity;
 
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -24,6 +23,8 @@ import com.example.hongzebin.schedule.R;
 import com.example.hongzebin.schedule.bean.Course;
 import com.example.hongzebin.schedule.bean.TableModel;
 import com.example.hongzebin.schedule.greendao.GreenDaoManager;
+import com.example.hongzebin.schedule.model.ScheduleModel;
+import com.example.hongzebin.schedule.presenter.SchedulePresenter;
 import com.example.hongzebin.schedule.util.ColorUtil;
 import com.example.hongzebin.schedule.util.GsonUtil;
 
@@ -31,6 +32,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * 课程表显示Activity
+ * Created By Mr.Bean
+ */
 public class ScheduleActivity extends AppCompatActivity {
 
     private Button mBtWeeksChoice;
@@ -42,6 +47,8 @@ public class ScheduleActivity extends AppCompatActivity {
     private int mColor;
     private String mJson;
     private boolean mFlag;
+    private SchedulePresenter mSchedulePresenter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +57,6 @@ public class ScheduleActivity extends AppCompatActivity {
         initView();
         initData();
         initEvent();
-        createCourseCount();
-        loadData();
     }
 
     /**
@@ -63,47 +68,14 @@ public class ScheduleActivity extends AppCompatActivity {
         for (int i = 1; i <= 12; i++) {
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT, 250);
+            //设置显示节次信息
             TextView textView = new TextView(this);
-            int color = getResources().getColor(R.color.black);
             textView.setText("" + i);
+            int color = getResources().getColor(R.color.black);
             textView.setTextColor(color);
             textView.setGravity(Gravity.CENTER);
             rootLayout.addView(textView, params);
         }
-    }
-
-    /**
-     * 加载课程数据进入课程表
-     */
-    private void loadData() {
-        List<Course> courseList;
-        if (!mFlag) {
-            //从数据库获取数据
-            courseList = mGreenDaoManager.queryAll();
-        } else {
-            //解析json数据
-            courseList = GsonUtil.parseJSONWithGson(mJson);
-            mGreenDaoManager.addAll(courseList);
-        }
-        for (Course course : courseList) {
-            TableModel tableModel = turnToTableModel(course);
-            mAllTableModelList.add(tableModel);
-            createCourseView(tableModel);
-        }
-    }
-
-    /**
-     * 把解析的得到的对象，转换成要放到课程表上的对象
-     *
-     * @param course 把gson解析得到的对象，进行转换
-     * @return 转换后的对象
-     */
-    private TableModel turnToTableModel(Course course) {
-        List<String> timeList = Arrays.asList(course.getTime().split(","));
-        List<String> weekList = Arrays.asList(course.getWeek().split(","));
-        return new TableModel(course.getName(), course.getNumber(), course.getMajor()
-                , course.getFigureNumber(), timeList, weekList, course.getWeekday()
-                , course.getPlace(), course.getTeacher());
     }
 
     /**
@@ -138,6 +110,7 @@ public class ScheduleActivity extends AppCompatActivity {
                 mRlWeekDay = findViewById(R.id.sunday);
                 break;
         }
+        //因为只有17个颜色可以选择，如果大于17将没有相应的颜色进行匹配
         if (mColor == 17) {
             mColor -= 16;
         } else {
@@ -162,7 +135,11 @@ public class ScheduleActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * 初始化界面
+     */
     private void initView() {
+        mSchedulePresenter = new SchedulePresenter();
         mTableModelList = new ArrayList<>();
         mAllTableModelList = new ArrayList<>();
         mBtLogOff = findViewById(R.id.id_log_off);
@@ -171,6 +148,9 @@ public class ScheduleActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
     }
 
+    /**
+     * 初始化数据
+     */
     private void initData() {
         mGreenDaoManager = GreenDaoManager.Holder.getInstance();
         Intent intent = getIntent();
@@ -179,6 +159,9 @@ public class ScheduleActivity extends AppCompatActivity {
         mColor = 0;
     }
 
+    /**
+     * 初始化事件处理
+     */
     private void initEvent() {
         //注销
         mBtLogOff.setOnClickListener(new View.OnClickListener() {
@@ -192,6 +175,18 @@ public class ScheduleActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 chooseWeeks();
+            }
+        });
+        createCourseCount();
+        mSchedulePresenter.loadData(mFlag, mJson, new SchedulePresenter.schedulePresenterCallBack() {
+            @Override
+            public void onLoading(TableModel tableModel) {
+                createCourseView(tableModel);
+            }
+
+            @Override
+            public void onFinish(List<TableModel> list) {
+                mAllTableModelList = list;
             }
         });
     }
@@ -225,6 +220,9 @@ public class ScheduleActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    /**
+     * 通过列表选择对话框选择周次
+     */
     private void chooseWeeks() {
         String items[] = {"第一周", "第二周", "第三周", "第四周", "第五周", "第六周", "第七周", "第八周", "第九周", "第十周", "第十一周"
                 , "第十二周", "第十三周", "第十四周", "第十五周", "第十六周", "第十七周", "第十八周", "第十九周", "第二十周"};
@@ -236,7 +234,7 @@ public class ScheduleActivity extends AppCompatActivity {
                 mTableModelList.clear();
                 String week = Integer.toString(which + 1);
                 Log.e("mAllTableModelList", "" + mAllTableModelList.size());
-                removeAllCourse(); 
+                removeAllCourse();
                 for (TableModel tableModel : mAllTableModelList) {
                     Log.e("table", "" + tableModel.getName() + "week:" + tableModel.getWeek() + "weekday" + tableModel.getWeekday());
                     for (String str : tableModel.getWeek()) {
@@ -253,6 +251,9 @@ public class ScheduleActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    /**
+     * 把显示出来的课程全部清除，方便选择星期后添加新的课程
+     */
     private void removeAllCourse() {
         RelativeLayout monday = findViewById(R.id.monday);
         monday.removeAllViews();

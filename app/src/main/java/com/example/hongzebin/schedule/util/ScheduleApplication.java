@@ -3,6 +3,10 @@ package com.example.hongzebin.schedule.util;
 import android.content.Context;
 import android.util.Log;
 
+/**
+ * 该类是全局获取Context
+ * Created By Mr.Bean
+ */
 public class ScheduleApplication extends android.app.Application {
 
     private static Context mContext;
